@@ -1,27 +1,23 @@
 <template>
   <div>
-    <Header/>
-    
-    <!-- 在此显示当前路由组件 -->
+    <Header />
     <router-view></router-view>
-
-    <Footer/> 
+    <!-- 如果是登录或注册页面，不显示Footer组件 -->
+    <!-- <Footer v-show="$route.path !== '/login' && $route.path !== '/register'" /> -->
+    <Footer v-show="!$route.meta.isHideFooter" />
   </div>
 </template>
 
 <script>
-import Header from '@/components/Header'
-import Footer from '@/components/Footer'
-
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 export default {
-  name: 'App',
+  name: "App",
   components: {
     Header,
-    Footer
-  }
-}
+    Footer,
+  },
+};
 </script>
 
-<style scoped>
-
-</style>
+<style></style>
