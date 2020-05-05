@@ -11,8 +11,15 @@
 <script>
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { reqBaseCategoryList, reqLogin } from "@/api";
 export default {
   name: "App",
+  async mounted() {
+    const result1 = await reqBaseCategoryList();
+    const result2 = await reqLogin("13700000000", "111111");
+    console.log("result", result1);
+    console.log("result", result2);
+  },
   components: {
     Header,
     Footer,
