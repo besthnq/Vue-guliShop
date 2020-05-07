@@ -65,15 +65,22 @@ export default {
       // this.$router.push(
       //   `/search/${this.keyword}?keyword2=${this.keyword.toUpperCase()}`
       // );
-      this.$router
-        .push({
-          name: "search",
-          params: { keyword: this.keyword === "" ? undefined : this.keyword },
-          query: { keyword2: this.keyword.toUpperCase() },
-        })
-        .then(() => {
-          console.log("跳转成功的回调执行~~");
-        });
+      // this.$router.push({
+      //   name: "search",
+      //   params: { keyword: this.keyword === "" ? undefined : this.keyword },
+      //   query: this.$route.query,
+      // });
+
+      const location = {
+        name: "search",
+      };
+      const keyword = this.keyword;
+      if (keyword) {
+        location.params = { keyword };
+      }
+      location.query = this.$route.query;
+
+      this.$router.push(location);
     },
   },
 };

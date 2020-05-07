@@ -11,14 +11,21 @@
 <script>
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { reqBaseCategoryList, reqLogin } from "@/api";
+// import { reqBaseCategoryList, reqLogin } from "@/api";
+import { reqFloors } from "@/api";
+
 export default {
   name: "App",
+  // 测试
   async mounted() {
-    const result1 = await reqBaseCategoryList();
-    const result2 = await reqLogin("13700000000", "111111");
-    console.log("result", result1);
-    console.log("result", result2);
+    //   const result1 = await reqBaseCategoryList();
+    //   const result2 = await reqLogin("13700000000", "111111");
+    //   console.log("result", result1);
+    //   console.log("result", result2);
+    this.$store.dispatch("getBaseCategoryList");
+
+    const result = await reqFloors();
+    console.log("mock result ", result);
   },
   components: {
     Header,

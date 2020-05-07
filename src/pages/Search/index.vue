@@ -1,5 +1,6 @@
 <template>
   <div>
+    <TypeNav/>
     <h2>params参数：keyword={{ $route.params.keyword }}</h2>
     <h2>query参数：keyword2={{ $route.query.keyword2 }}</h2>
     <h2>params3参数：keyword3={{ keyword3 }}</h2>

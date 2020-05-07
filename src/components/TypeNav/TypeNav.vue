@@ -1,7 +1,62 @@
 <template>
   <div class="type-nav">
     <div class="container">
-      <h2 class="all">全部商品分类</h2>
+      <div @mouseenter="ShowFirst" @mouseleave="HideFirst">
+        <h2 class="all">
+          全部商品分类
+        </h2>
+        <transition name="move">
+          <div class="sort" v-show="isShowFirst">
+            <div class="all-sort-list2" @click="toSearch">
+              <div
+                class="item"
+                v-for="(c1, index) in categoryList"
+                :key="c1.categoryId"
+                :class="{ item_on: currentIndex === index }"
+                @mouseenter="showSubCategorys(index)"
+              >
+                <h3>
+                  <a
+                    href="javascript:;"
+                    :data-categoryName="c1.categoryName"
+                    :data-category1Id="c1.categoryId"
+                  >
+                    {{ c1.categoryName }}
+                  </a>
+                </h3>
+                <div class="item-list clearfix">
+                  <div class="subitem">
+                    <dl
+                      class="fore"
+                      v-for="c2 in c1.categoryChild"
+                      :key="c2.categoryId"
+                    >
+                      <dt>
+                        <a
+                          href="javascript:;"
+                          :data-categoryName="c2.categoryName"
+                          :data-category2Id="c2.categoryId"
+                          >{{ c2.categoryName }}</a
+                        >
+                      </dt>
+                      <dd>
+                        <em v-for="c3 in c2.categoryChild" :key="c3.categoryId">
+                          <a
+                            href="javascript:;"
+                            :data-categoryName="c3.categoryName"
+                            :data-category3Id="c3.categoryId"
+                            >{{ c3.categoryName }}</a
+                          >
+                        </em>
+                      </dd>
+                    </dl>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </transition>
+      </div>
       <nav class="nav">
         <a href="###">服装城</a>
         <a href="###">美妆馆</a>
@@ -12,45 +67,28 @@
         <a href="###">有趣</a>
         <a href="###">秒杀</a>
       </nav>
-      <div class="sort">
-        <div class="all-sort-list2">
-          <div class="item" v-for="c1 in categoryList" :key="c1.categoryId">
-            <h3>
-              <a href="">{{ c1.categoryName }}</a>
-            </h3>
-            <div class="item-list clearfix">
-              <div class="subitem">
-                <dl
-                  class="fore"
-                  v-for="c2 in c1.categoryChild"
-                  :key="c2.categoryId"
-                >
-                  <dt>
-                    <a href="">{{ c2.categoryName }}</a>
-                  </dt>
-                  <dd>
-                    <em v-for="c3 in c2.categoryChild" :key="c3.categoryId">
-                      <a href="">{{ c3.categoryName }}</a>
-                    </em>
-                  </dd>
-                </dl>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
   </div>
 </template>
 
 <script>
 import { mapState } from "vuex";
+import throttle from "lodash/throttle";
 export default {
   name: "TypeNav",
-  mounted() {
-    // 异步获取三级列表
-    this.$store.dispatch("getBaseCategoryList");
+  data() {
+    return {
+      currentIndex: -2,
+      isShowFirst: false,
+    };
   },
+  beforeMount() {
+    this.isShowFirst = this.$route.path === "/";
+  },
+  // mounted() {
+  //   // 异步获取三级列表
+  //   this.$store.dispatch("getBaseCategoryList");
+  // },
   computed: {
     /* baseCategoryList() {
       return this.$store.state.home.baseCategoryList;
@@ -59,17 +97,80 @@ export default {
       categoryList: (state) => state.home.baseCategoryList,
     }),
   },
+  methods: {
+    // 分类列表显示隐藏及节流处理
+    showSubCategorys: throttle(function(index) {
+      if (this.currentIndex === -2) return;
+      this.currentIndex = index;
+    }, 300),
+    // 编程式导航动态传参
+    toSearch(event) {
+      const {
+        categoryname,
+        category1id,
+        category2id,
+        category3id,
+      } = event.target.dataset;
+      if (categoryname) {
+        const query = { categoryName: categoryname };
+        if (category1id) {
+          query.category1Id = category1id;
+          /* this.$router.push({
+            name: "search",
+            query: { categoryName: categoryname, category1Id: category1id },
+          }); */
+        } else if (category2id) {
+          query.category2Id = category2id;
+          /* this.$router.push({
+            name: "search",
+            query: { categoryName: categoryname, category2Id: category2id },
+          }); */
+        } else if (category3id) {
+          query.category3Id = category3id;
+          /* this.$router.push({
+            name: "search",
+            query: { categoryName: categoryname, category3Id: category3id },
+          }); */
+        }
+        const location = {
+          name: "search",
+          query,
+          params: {
+            keyword:
+              this.$route.params.keyword === ""
+                ? undefined
+                : this.$route.params.keyword,
+          },
+        };
+        this.$router.push(location);
+        this.HideFirst();
+      }
+    },
+    // 一级列表显示隐藏
+    ShowFirst() {
+      this.currentIndex = -1;
+      this.isShowFirst = true;
+    },
+    HideFirst() {
+      this.currentIndex = -2;
+      if (this.$route.path !== "/") {
+        this.isShowFirst = false;
+      }
+    },
+  },
 };
 </script>
 
 <style lang="less" scoped>
 .type-nav {
   border-bottom: 2px solid #e1251b;
+
   .container {
     width: 1200px;
     margin: 0 auto;
     display: flex;
     position: relative;
+
     .all {
       width: 210px;
       height: 45px;
@@ -80,6 +181,7 @@ export default {
       font-size: 14px;
       font-weight: bold;
     }
+
     .nav {
       a {
         height: 45px;
@@ -89,6 +191,7 @@ export default {
         color: #333;
       }
     }
+
     .sort {
       position: absolute;
       left: 0;
@@ -98,6 +201,16 @@ export default {
       position: absolute;
       background: #fafafa;
       z-index: 999;
+
+      &.move-enter-active {
+        transition: all 0.5s;
+      }
+
+      &.move-enter {
+        opacity: 0;
+        height: 0;
+      }
+
       .all-sort-list2 {
         .item {
           h3 {
@@ -107,33 +220,38 @@ export default {
             overflow: hidden;
             padding: 0 20px;
             margin: 0;
+
             a {
               color: #333;
             }
           }
+
           .item-list {
             display: none;
             position: absolute;
             width: 734px;
             min-height: 460px;
-            _height: 200px;
             background: #f7f7f7;
             left: 210px;
             border: 1px solid #ddd;
             top: 0;
             z-index: 9999 !important;
+
             .subitem {
               float: left;
               width: 650px;
               padding: 0 4px 0 8px;
+
               dl {
                 border-top: 1px solid #eee;
                 padding: 6px 0;
                 overflow: hidden;
                 zoom: 1;
+
                 &.fore {
                   border-top: 0;
                 }
+
                 dt {
                   float: left;
                   width: 54px;
@@ -142,11 +260,13 @@ export default {
                   padding: 3px 6px 0 0;
                   font-weight: 700;
                 }
+
                 dd {
                   float: left;
-                  width: 415px;
+                  width: 555px;
                   padding: 3px 0 0;
                   overflow: hidden;
+
                   em {
                     float: left;
                     height: 14px;
@@ -159,7 +279,9 @@ export default {
               }
             }
           }
-          &:hover {
+
+          &.item_on {
+            background: #ccc;
             .item-list {
               display: block;
             }
