@@ -12,7 +12,7 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 // import { reqBaseCategoryList, reqLogin } from "@/api";
-import { reqFloors } from "@/api";
+// import { reqFloors } from "@/api";
 
 export default {
   name: "App",
@@ -23,9 +23,12 @@ export default {
     //   console.log("result", result1);
     //   console.log("result", result2);
     this.$store.dispatch("getBaseCategoryList");
+    // 测试
+    // this.$store.dispatch("getBanners");
+    // this.$store.dispatch("getFloors");
 
-    const result = await reqFloors();
-    console.log("mock result ", result);
+    // const result = await reqBanners();
+    // console.log("mock result ", result);
   },
   components: {
     Header,

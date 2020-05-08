@@ -24,5 +24,7 @@ export function reqLogin(mobile, password) {
   });
 }
 
+
+// mocks
 export const reqBanners = () => mockAjax("/banners");
 export const reqFloors = () => mockAjax("/floors");

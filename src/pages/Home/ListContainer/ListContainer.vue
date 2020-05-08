@@ -3,28 +3,7 @@
     <div class="sortList clearfix">
       <div class="center">
         <!--banner轮播-->
-        <div class="swiper-container" id="mySwiper">
-          <div class="swiper-wrapper">
-            <div class="swiper-slide">
-              <img src="./images/banner3.jpg" />
-            </div>
-            <!-- <div class="swiper-slide">
-                                <img src="./images/banner2.jpg" />
-                            </div>
-                            <div class="swiper-slide">
-                                <img src="./images/banner3.jpg" />
-                            </div>
-                            <div class="swiper-slide">
-                                <img src="./images/banner4.jpg" />
-                            </div> -->
-          </div>
-          <!-- 如果需要分页器 -->
-          <div class="swiper-pagination"></div>
-
-          <!-- 如果需要导航按钮 -->
-          <div class="swiper-button-prev"></div>
-          <div class="swiper-button-next"></div>
-        </div>
+        <Carousel :carouselList="banners" />
       </div>
       <div class="right">
         <div class="news">
@@ -100,9 +79,21 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
-  name: "",
- 
+  name: "ListContainer",
+  computed: {
+    ...mapState({
+      banners: (state) => state.home.banners,
+    }),
+  },
+  /* ajax请求更新页面是异步执行的，请求发生时data数据就更新，
+  watch监视到数据变化后就立即执行回调函数，此时页面尚未更新，
+  页面中列表数据还没显示。通过nextTick()技术，在数据更新后
+  页面更新前调用nextTick(callback)，回调函数在页面更新后执行
+   */
+
+  mounted() {},
 };
 </script>
 
