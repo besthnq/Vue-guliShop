@@ -38,11 +38,7 @@
             class="input-error input-xxlarge"
             v-model="keyword"
           />
-          <button
-            class="sui-btn btn-xlarge btn-danger"
-            type="button"
-            @click="search"
-          >
+          <button class="sui-btn btn-xlarge btn-danger" @click.prevent="search">
             搜索
           </button>
         </form>
@@ -56,8 +52,13 @@ export default {
   name: "Header",
   data() {
     return {
-      keyword: "atguigu",
+      keyword: "",
     };
+  },
+  mounted() {
+    this.$bus.$on("removeKeyword", () => {
+      this.keyword = "";
+    });
   },
   methods: {
     search() {
@@ -80,7 +81,11 @@ export default {
       }
       location.query = this.$route.query;
 
-      this.$router.push(location);
+      if (this.$route.path.indexOf("/search") === 0) {
+        this.$router.replace(location);
+      } else {
+        this.$router.push(location);
+      }
     },
   },
 };

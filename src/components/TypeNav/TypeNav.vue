@@ -142,7 +142,13 @@ export default {
                 : this.$route.params.keyword,
           },
         };
-        this.$router.push(location);
+
+        if (this.$route.name === "search") {
+          this.$router.replace(location);
+        } else {
+          this.$router.push(location);
+        }
+
         this.HideFirst();
       }
     },

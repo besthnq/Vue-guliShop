@@ -24,7 +24,14 @@ export function reqLogin(mobile, password) {
   });
 }
 
-
 // mocks
 export const reqBanners = () => mockAjax("/banners");
 export const reqFloors = () => mockAjax("/floors");
+
+// /api/list 搜索商品请求函数
+export const reqProductList = (searchParams) =>
+  ajax({
+    url: "/list",
+    method: "POST",
+    data: searchParams,
+  });
