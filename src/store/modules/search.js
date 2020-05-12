@@ -10,6 +10,14 @@ const mutations = {
 };
 const actions = {
   async getProductList({ commit }, searchParams) {
+    // 产生一个新对象, 避免后面删除options对象
+    searchParams = { ...searchParams };
+    // 移除没有必要携带的空串数据
+    Object.keys(searchParams).forEach((key) => {
+      if (searchParams[key] === "") {
+        delete searchParams[key];
+      }
+    });
     const result = await reqProductList(searchParams);
     if (result.code === 200) {
       const productList = result.data;

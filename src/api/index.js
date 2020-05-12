@@ -35,3 +35,9 @@ export const reqProductList = (searchParams) =>
     method: "POST",
     data: searchParams,
   });
+//  /api/item/{ skuId }获取商品详情
+export const reqProduct = (skuId) => ajax(`/item/${skuId}`);
+
+//  /api/cart/addToCart/{ skuID }/{ skuNum }加入购物车
+export const reqAddToCart = (skuId, skuNum) =>
+  ajax.post(`/cart/addToCart/${skuId}/${skuNum}`);

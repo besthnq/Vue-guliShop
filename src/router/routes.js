@@ -19,7 +19,7 @@ export default [
     }),
   },
   {
-    path: "/detail/:id",
+    path: "/detail/:skuId",
     component: Detail,
     name: "detail",
   },
