@@ -402,7 +402,17 @@ export default {
       // 方式三：利用dispath（）的promise返回值
       try {
         await this.$store.dispatch("addToCart3", { skuId, skuNum });
-        alert("添加成功~~");
+        // 缓存商品信息数据
+        window.sessionStorage.setItem(
+          "SKU_INFO_KEY",
+          JSON.stringify(this.skuInfo)
+        );
+
+        // 跳转到添加购物车成功界面
+        this.$router.push({
+          path: "/addcartsuccess",
+          query: { skuNum },
+        });
       } catch (error) {
         alert(error);
       }

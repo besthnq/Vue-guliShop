@@ -41,3 +41,12 @@ export const reqProduct = (skuId) => ajax(`/item/${skuId}`);
 //  /api/cart/addToCart/{ skuID }/{ skuNum }加入购物车
 export const reqAddToCart = (skuId, skuNum) =>
   ajax.post(`/cart/addToCart/${skuId}/${skuNum}`);
+
+//  /api/cart/cartList  获取购物车列表
+export const reqCartList = () => ajax("/cart/cartList");
+// /api/cart/checkCart/{skuID}/{isChecked}  切换商品选中状态
+export const reqCheckCartItem = (skuID, isChecked) =>
+  ajax(`/cart/checkCart/${skuID}/${isChecked} `);
+//  /api/cart/deleteCart/{skuId}  删除购物车商品
+export const reqDeleteCartItem = (skuId) =>
+  ajax.delete(`/cart/deleteCart/${skuId} `);

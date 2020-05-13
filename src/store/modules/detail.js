@@ -1,4 +1,4 @@
-import { reqProduct, reqAddToCart } from "@/api";
+import { reqProduct } from "@/api";
 
 const state = {
   detailInfo: {}, //当前商品详情信息对象
@@ -15,32 +15,6 @@ const actions = {
     if (result.code === 200) {
       const detailInfo = result.data;
       commit("RECEIVE_DETAIL_INFO", detailInfo);
-    }
-  },
-  async addToCart({ commit }, { skuId, skuNum, callback }) {
-    const result = await reqAddToCart(skuId, skuNum);
-    if (result.code === 200) {
-      // console.log("添加到购物车成功");
-      callback();
-    } else {
-      // console.log("添加到购物车失败");
-      callback("添加到购物车失败");
-    }
-  },
-  async addToCart2({ commit }, { skuId, skuNum }) {
-    const result = await reqAddToCart(skuId, skuNum);
-    if (result.code === 200) {
-      return "";
-    } else {
-      return "添加到购物车失败";
-    }
-  },
-  async addToCart3({ commit }, { skuId, skuNum }) {
-    const result = await reqAddToCart(skuId, skuNum);
-    if (result.code === 200) {
-      return "";
-    } else {
-      throw new Error("添加失败......");
     }
   },
 };

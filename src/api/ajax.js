@@ -4,10 +4,12 @@
 // 2.拦截器中设置请求条进度
 // 3.成功返回的数据设置为response.data
 // 4.统一处理请求错误
+// 5.每次请求都携带一个userTempId请求头, 数据值在state中
 
 import axios from "axios";
 import NProgress from "nprogress"; //引入nprogress.js文件，packjson文件中配置了main：nprogress.js
 import "nprogress/nprogress.css";
+import store from "@/store";
 
 // 配置不显示右上角的旋转进度条, 只显示水平进度条
 NProgress.configure({ showSpinner: false });
@@ -20,6 +22,7 @@ const instance = axios.create({
 
 instance.interceptors.request.use((config) => {
   NProgress.start();
+  config.headers.userTempId = store.state.user.userTempId;
   return config;
 });
 
