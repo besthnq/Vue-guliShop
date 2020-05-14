@@ -42,7 +42,9 @@
               type="text"
               :value="item.skuNum"
               class="itxt"
-              @change="changeItemNum(item, $event.target.value - item.skuNum)"
+              @change="
+                changeItemNum(item, $event.target.value - item.skuNum, $event)
+              "
             />
             <a
               href="javascript:void(0)"
@@ -55,7 +57,9 @@
             <span class="sum">{{ item.cartPrice * item.skuNum }}</span>
           </li>
           <li class="cart-list-con7">
-            <a href="#none" class="sindelet" @click="deleteItem(item)">删除</a>
+            <a href="javascript:;" class="sindelet" @click="deleteItem(item)"
+              >删除</a
+            >
             <br />
             <a href="#none">移到收藏</a>
           </li>
@@ -68,7 +72,7 @@
         <span>全选</span>
       </div>
       <div class="option">
-        <a href="#none" @click="delCheckedItem">删除选中的商品</a>
+        <a href="javascript:;" @click="delCheckedItem">删除选中的商品</a>
         <a href="#none">移到我的关注</a>
         <a href="#none">清除下柜商品</a>
       </div>
@@ -101,7 +105,10 @@ export default {
     // 全选与全不选
     isCheckedAll: {
       get() {
-        return this.cartList.every((item) => item.isChecked === 1);
+        return (
+          this.cartList.every((item) => item.isChecked === 1) &&
+          this.cartList.length > 0
+        );
       },
       async set(value) {
         //value是当前勾选状态的值true/false
@@ -118,35 +125,45 @@ export default {
     this.$store.dispatch("getCartList");
   },
   methods: {
+    // 删除选中商品项
     async delCheckedItem() {
-      try {
-        await this.$store.dispatch("delCheckedItem");
-        this.$store.dispatch("getCartList")
-      } catch (error) {
-        alert(error.message);
+      if (window.confirm("确认删除么？")) {
+        try {
+          await this.$store.dispatch("delCheckedItem");
+          this.$store.dispatch("getCartList");
+        } catch (error) {
+          alert(error.message);
+        }
       }
     },
     // 删除商品项
     async deleteItem(item) {
-      try {
-        const skuId = item.skuId;
-        await this.$store.dispatch("deleteCartItem", skuId);
-        this.$store.dispatch("getCartList");
-      } catch (error) {
-        alert(error.message);
+      if (window.confirm("确认删除么？")) {
+        try {
+          const skuId = item.skuId;
+          await this.$store.dispatch("deleteCartItem", skuId);
+          this.$store.dispatch("getCartList");
+        } catch (error) {
+          alert(error.message);
+        }
       }
     },
     // 改变购物车商品数量
-    async changeItemNum(item, changeNum) {
-      try {
-        if (item.skuNum + changeNum < 1) return;
-        await this.$store.dispatch("addToCart3", {
-          skuId: item.skuId,
-          skuNum: changeNum,
-        });
-        this.$store.dispatch("getCartList");
-      } catch (error) {
-        alert(error.message);
+    async changeItemNum(item, changeNum, event) {
+      if (item.skuNum + changeNum > 0) {
+        try {
+          await this.$store.dispatch("addToCart3", {
+            skuId: item.skuId,
+            skuNum: changeNum,
+          });
+          this.$store.dispatch("getCartList");
+        } catch (error) {
+          alert(error.message);
+        }
+      } else {
+        if (event) {
+          event.target.value = item.skuNum;
+        }
       }
     },
     // 改变勾选状态

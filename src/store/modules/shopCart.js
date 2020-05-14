@@ -50,7 +50,7 @@ export default {
       }
     },
     // 删除选中商品
-    async delCheckedItem({ state, dispatch }) {
+    /* async delCheckedItem({ state, dispatch }) {
       const promises = [];
       state.cartList.forEach((item) => {
         if (!item.isChecked) return;
@@ -58,6 +58,15 @@ export default {
         const promise = dispatch("deleteCartItem", skuId);
         promises.push(promise);
       });
+      return Promise.all(promises);
+    }, */
+    async delCheckedItem({ state, dispatch }) {
+      const promises = state.cartList.reduce((pre, item) => {
+        if (item.isChecked === 1) {
+          pre.push(dispatch("deleteCartItem", item.skuId));
+        }
+        return pre;
+      }, []);
       return Promise.all(promises);
     },
     //购物车数量增减
