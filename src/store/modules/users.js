@@ -1,6 +1,11 @@
 // 管理用户数据的模块
 
-import { getUserTempId, saveUserInfo, getUserInfo } from "@/utils";
+import {
+  getUserTempId,
+  saveUserInfo,
+  getUserInfo,
+  removeUserInfo,
+} from "@/utils";
 import { reqLogin, reqRegister, reqLogout } from "@/api";
 
 export default {
@@ -10,7 +15,10 @@ export default {
   },
   mutations: {
     RECEIVE_USER_INFO(state, { userInfo }) {
-      state.userInfo = userInfo || {};
+      state.userInfo = userInfo;
+    },
+    RESET_USER_INFO(state) {
+      state.userInfo = {};
     },
   },
   actions: {
@@ -33,7 +41,8 @@ export default {
     async logout({ commit }) {
       const result = await reqLogout();
       if (result.code == 200) {
-        commit("RECEIVE_USER_INFO", {});
+        commit("RESET_USER_INFO");
+        removeUserInfo();
       } else {
         throw new Error(result.data || result.message || "注册失败");
       }

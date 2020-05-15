@@ -7,6 +7,10 @@ import "@/mock/mockServer";
 import "swiper/css/swiper.min.css";
 import Carousel from "@/components/Carousel/Carousel.vue";
 import Pagination from "@/components/Pagination/Pagination.vue";
+import "./validate";
+import * as API from "@/api";
+
+Vue.prototype.$API = API;
 
 Vue.config.productionTip = false;
 Vue.component("TypeNav", TypeNav);

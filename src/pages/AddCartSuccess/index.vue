@@ -40,6 +40,16 @@ export default {
     // 同步读取缓存商品信息数据
     this.skuInfo = JSON.parse(window.sessionStorage.getItem("SKU_INFO_KEY"));
   },
+  /* // 只有携带的skuNum以及sessionStorage中有skuInfo数据, 才能查看添加购物车成功的界面
+  beforeRouteEnter(to, from, next) {
+    const skuNum = to.query.skuNum;
+    const skuInfo = JSON.parse(window.sessionStorage.getItem("SKU_INFO_KEY"));
+    if (skuNum && skuInfo) {
+      next();
+    } else {
+      next("/");
+    }
+  }, */
 };
 </script>
 

@@ -5,6 +5,7 @@
 // 3.成功返回的数据设置为response.data
 // 4.统一处理请求错误
 // 5.每次请求都携带一个userTempId请求头, 数据值在state中
+// 6.每次请求（已登录）都携带一个token请求头，数据值在state中
 
 import axios from "axios";
 import NProgress from "nprogress"; //引入nprogress.js文件，packjson文件中配置了main：nprogress.js
@@ -23,6 +24,10 @@ const instance = axios.create({
 instance.interceptors.request.use((config) => {
   NProgress.start();
   config.headers.userTempId = store.state.user.userTempId;
+  const token = store.state.user.userInfo.token;
+  if (token) {
+    config.headers["token"] = token;
+  }
   return config;
 });
 

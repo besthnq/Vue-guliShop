@@ -1,6 +1,7 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import routes from "./routes";
+import store from "@/store";
 
 Vue.use(VueRouter);
 
@@ -28,10 +29,28 @@ VueRouter.prototype.replace = function(location, onComplete, onAbort) {
   }
 };
 
-export default new VueRouter({
+const router = new VueRouter({
   mode: "history",
   routes,
   scrollBehavior(to, from, savedPosition) {
     return { x: 0, y: 0 }; //路由跳转时，滚动条自动滚动到起始位置
   },
 });
+
+/* a.只有登陆了, 才能查看交易/支付/个人中心界面 */
+const checkPath = ["/trade", "/pay", "/center"];
+router.beforeEach((to, from, next) => {
+  const targetPath = to.path;
+  const isCheckPath = checkPath.some((path) => targetPath.indexOf(path) === 0);
+  if (isCheckPath) {
+    if (store.state.users.userInfo.name) {
+      next();
+    } else {
+      next("/login?redirect=" + targetPath);
+    }
+  } else {
+    next();
+  }
+});
+
+export default router;
