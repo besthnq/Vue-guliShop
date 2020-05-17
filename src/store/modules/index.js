@@ -4,6 +4,7 @@ import search from "./search";
 import detail from "./detail";
 import users from "./users";
 import shopCart from "./shopCart";
+import order from "./order";
 
 export default {
   home,
@@ -12,4 +13,5 @@ export default {
   detail,
   users,
   shopCart,
+  order,
 };

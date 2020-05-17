@@ -1,6 +1,7 @@
+const Search = () => import("@/pages/Search");
 import Home from "@/pages/Home";
 import Login from "@/pages/Login";
-import Search from "@/pages/Search";
+// import Search from "@/pages/Search";
 import Register from "@/pages/Register";
 import Detail from "@/pages/Detail";
 import AddCartSuccess from "@/pages/AddCartSuccess";
@@ -67,6 +68,7 @@ export default [
   {
     path: "/pay",
     component: Pay,
+    props: (route) => ({ orderId: route.query.orderId }),
     /* 只能从交易界面, 才能跳转到支付界面 */
     beforeEnter: (to, from, next) => {
       if (from.path === "/trade") {

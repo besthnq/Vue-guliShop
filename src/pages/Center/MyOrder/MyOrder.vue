@@ -93,6 +93,17 @@
       :showPageNo="5"
       @currentChange="getMyOrders"
     />
+    <el-pagination
+      layout="prev, pager, next, ->, total"
+      :total="total"
+      :page-size="pageSize"
+      :page-count="7"
+      :current-page="currentPage"
+      prev-text="上一页"
+      next-text="下一页"
+      @current-change="getMyOrders"
+    >
+    </el-pagination>
   </div>
 </template>
 
